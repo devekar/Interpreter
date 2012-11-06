@@ -27,4 +27,5 @@ Files associated with the program:
 8) inpudata - input data file for above program
 9) tests.zip - contains sample core programs and corresponding input data files
 10) Documentation.txt - Describes the classes used in the program, working of program, test cases and their outputs.
+11) CoreBNF.txt - defines the CORE grammar for Interpreter
 
