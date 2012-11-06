@@ -1,0 +1,388 @@
+CSE 655, 
+Core Interpreter Project, 
+Part 2: Interpreter
+
+Author: Vaibhav Devekar
+Email-id: devekar.1@osu.edu
+
+
+=============
+Documentation
+=============
+Interpreter is a program that parses a core program file, performs pretty print and executes the file.
+
+Contents:
+> How to use Tokenizer class
+> Tokenizer class methods
+> InputData class methods
+> Classes corresponding to each non-terminal in grammar (classes.h)
+> Description
+> Testing
+> Notes
+
+
+How to use Interpreter
+--------------------------
+To use the Interpreter, you need gcc on the system. 
+
+Compile Interpreter.cpp file by navigating to directory containing the files and type: 
+g++ -o Interpreter.cpp
+
+To run the interpreter,type : 
+./a.out COREPROGRAM INPUTDATA 
+
+where COREPROGRAM is the filepath for the program to be interpreted and INPUTDATA is the path to file containing the data required by the program.
+
+	
+Tokenizer class methods
+-----------------------
+Tokenizer(char* gramfile, char* inputfile)
+	Private constructor for Tokenizer class, build a list of legal tokens, opens input file and gets first token using skip_token().
+	
+static void instance(char* inputfile);
+	Calls Tokenizer constructor if pointer onlycopy is null. Argument inputfile is the path to the input program. Ensures singleton pattern.
+	
+static Tokenizer* instance();
+	Returns the existing Tokenizer object pointed by onlycopy. Raises error if onlycopy is null.
+	
+bool skip_token()
+	Updates current token to the next one in input stream using issimpletoken() and iscomplextoken() methods. Returns false when end of file reached else returns true.
+
+int get_token_no()
+	Returns current token number.
+	
+string get_token()
+	Returns current token name.
+	
+int issimpletoken(string s)
+	Identifies if s is reserved word or symbol or an integer or an identifier. Returns the corresponding token number else returns 0.
+	
+int iscomplextoken(string &s)
+	Identifies the first token in s if s is a concatenated sequence of symbols and non-symbol tokens. Returns the corresponding token number.
+	The reference argument makes it possible for calling function to get the identified token substring from whole string.
+
+bool isint(string s)
+	Returns true if s is an intger.
+	
+bool isidentifier(string s)
+	Returns true if s is a valid identifier.
+	
+
+InputData class methods	
+-----------------------
+InputData(char* inputfile);
+	Private constructor for InputData class. Reads input data from file specified in argument.
+	
+static void instance(char* inputfile);
+	Calls InputData constructor if pointer onlycopy is null. Argument inputfile is the path to file containing input data. Ensures singleton pattern.
+	
+static InputData* instance();
+	Returns the existing InputData object pointed by onlycopy. Raises error if onlycopy is null.
+	
+int get_next_input();
+	Returns the next input contained in input data file.
+	
+	
+Classes corresponding to each non-terminal in grammar (classes.h)
+----------------------------------------------------------------
+Each of the following classes contain a constructor and methods for parsing, printing and executing except for classes Id and IdList, which do not have the execute method.
+
+class Id
+	int getIdVal();  //Return value of identifier
+	void setIdVal(int i);  //assign value to identifier
+	void declId();    //set declared=true
+
+class IdList
+	void readIdList();   //Get next input from InputData object, call setId for each identifier in the list
+	void writeIdList();  //Display value of each identifier in the list
+	void declIdList();   //Call decId for each identifier in the list
+
+class Op
+class Fac
+class Exp
+class Comp
+class Cond
+class Assign
+class If
+class Loop
+class Input
+class Output
+class Stmt
+class SS
+class Decl
+class DS
+class Prog
+
+	
+	
+Description
+------------
+The main program calls upon the static methods of Tokenizer and InputData classes to create a single object each. It then creates a object of class Prog and calls upon methods parseProg(), print Prog() and execProg().
+
+The Prog object in turn calls parseDS() method of DS object to parse declaration, parseSS() method of SS object to parse the statements in the body of program. Each declaration statement is parsed by a Decl object. The objects for Stmt class handle each statement in the program body.
+
+Depending on the first token of each statement, the Stmt object passes the processing of statement to appropriate class among Assign, If, While, Input and Output. 
+
+The Exp class handles the parsing of RHS of assign statement and the Id class handles the identifier on LHS. The Exp class in turn hands over parsing to Fac object which passes the parsing to Op object. The If object passes parsing of condition to Cond object while the statements including the ones in the else portion if present are handled by SS objects. The Cond object calls upon Comp or Cond object depending on the alternative used in the condition. The while loop follows similar processing. The Input and Output objects make use of IdList and in turn Id objects to parse the identifiers.
+
+The printing and execution follow similar processing.
+
+
+Testing
+--------
+The programs in the "tests" folder were input to the Interpreter. The corresponding results have been provided.
+
+
+1) test1.txt, inputdata1.txt
+*********** PROGRAM ***********
+
+program
+
+        int X , Y , XY ;
+
+begin
+
+        read X ;
+        Y = 0 ;
+        while ( X  > 0 ) loop
+                read XY ;
+                write XY ;
+                Y = Y + XY ;
+                X = X - 1 ;
+        end;
+        write Y ;
+
+end
+
+
+*********** OUTPUT ***********
+
+XY = 7
+XY = -4
+XY = 10
+XY = 5
+XY = -9
+Y = 9
+
+
+2) test2.txt, inputdata21.txt
+*********** PROGRAM ***********
+
+program
+
+        int ABC , D ;
+
+begin
+
+        read ABC ;
+        read D ;
+        while ( ABC  != D ) loop
+                if ( ABC  > D ) then
+                        ABC = ABC - D ;
+                else
+                        D = D - ABC ;
+                end;
+        end;
+        write D ;
+
+end
+
+
+*********** OUTPUT ***********
+
+D = 9
+
+
+3) test2.txt, inputdata22.txt
+*********** PROGRAM ***********
+
+program
+
+        int ABC , D ;
+
+begin
+
+        read ABC ;
+        read D ;
+        while ( ABC  != D ) loop
+                if ( ABC  > D ) then
+                        ABC = ABC - D ;
+                else
+                        D = D - ABC ;
+                end;
+        end;
+        write D ;
+
+end
+
+
+*********** OUTPUT ***********
+
+D = 1
+
+
+4) test2.txt, inputdata23.txt
+*********** PROGRAM ***********
+
+program
+
+        int ABC , D ;
+
+begin
+
+        read ABC ;
+        read D ;
+        while ( ABC  != D ) loop
+                if ( ABC  > D ) then
+                        ABC = ABC - D ;
+                else
+                        D = D - ABC ;
+                end;
+        end;
+        write D ;
+
+end
+
+
+*********** OUTPUT ***********
+
+D = 1
+
+
+5) test3.txt, inputdata31.txt
+*********** PROGRAM ***********
+
+program
+
+        int X1 , X4 ;
+        int X2 , X3 , X7 ;
+
+begin
+
+        X1 = 0 ;
+        X2 = 1 ;
+        X3 = 1 ;
+        read X4 ;
+        while ( X1  < X4 ) loop
+                X7 = X2 + X3 ;
+                X2 = X3 ;
+                X3 = X7 ;
+                X1 = X1 + 1 ;
+        end;
+        write X2 ;
+
+end
+
+
+*********** OUTPUT ***********
+
+X2 = 8
+
+
+6) test3.txt, inputdata32.txt
+*********** PROGRAM ***********
+
+program
+
+        int X1 , X4 ;
+        int X2 , X3 , X7 ;
+
+begin
+
+        X1 = 0 ;
+        X2 = 1 ;
+        X3 = 1 ;
+        read X4 ;
+        while ( X1  < X4 ) loop
+                X7 = X2 + X3 ;
+                X2 = X3 ;
+                X3 = X7 ;
+                X1 = X1 + 1 ;
+        end;
+        write X2 ;
+
+end
+
+
+*********** OUTPUT ***********
+
+X2 = 89
+
+
+7) test3.txt, inputdata33.txt
+*********** PROGRAM ***********
+
+program
+
+        int X1 , X4 ;
+        int X2 , X3 , X7 ;
+
+begin
+
+        X1 = 0 ;
+        X2 = 1 ;
+        X3 = 1 ;
+        read X4 ;
+        while ( X1  < X4 ) loop
+                X7 = X2 + X3 ;
+                X2 = X3 ;
+                X3 = X7 ;
+                X1 = X1 + 1 ;
+        end;
+        write X2 ;
+
+end
+
+
+*********** OUTPUT ***********
+
+X2 = 3
+
+
+8) test4.txt inputdata4.txt
+*********** PROGRAM ***********
+
+program
+
+        int X ;
+
+begin
+
+        read Y ;
+        write X ;
+
+end
+
+
+*********** OUTPUT ***********
+
+Y not declared.
+
+
+9) test5.txt inputdata5.txt
+*********** PROGRAM ***********
+
+program
+
+        int X ;
+
+begin
+
+        write X ;
+
+end
+
+
+*********** OUTPUT ***********
+
+X  not initialised
+
+
+10) test6.txt inputdata6.txt
+No declaration found.
+
+
+Notes
+-----
+The Interpreter does not check for statement validity at every token skipped. For example, for a While statement, the first keyword is 'while' followed by a condition, followed by 'loop', the loop body and finally the 'end' statement. The interpreter does not check if keyword present after the condition is actually 'loop'. While I have included error checking for unexpected keywords for some of the cases (eg. if-then) for demonstration, the interpreter requires that the program statements are syntactically valid.
+

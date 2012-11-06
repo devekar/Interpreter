@@ -1,0 +1,30 @@
+CSE 655, 
+Core Interpreter Project, 
+Part 2:
+
+Author: Vaibhav Devekar
+Email-id: devekar.1@osu.edu
+
+
+======
+README
+======
+
+Instructions to run program:
+1) Open terminal in Linux and navigate to directory containing the source files.
+2) Use command "g++ -o Interpreter Interpreter.cpp" to compile program.
+3) Use command "./Interpreter coreprogram.txt inputdata.txt" to execute program where coreprogram.txt is the sample program file and  inputdata.txt is the corresponding data file in the same directory.
+
+
+Files associated with the program:
+1) Interpreter.cpp - Main file, calls for parsing, printing and executing program.
+2) Classes.cpp - Contains definition for each class corresponding to a non-terminal in coreprogram.
+3) Classes.h - header file for classes defined in classes.cpp
+4) InputData.cpp - Class definition for reading and consuming integers from data file.
+5) InputData.h - Header file for InputData class
+6) Tokenizer.cpp - Defines Tokenizer class,to read tokens from program file. 
+7) Tokenizer.h - Header file for Tokenizer class
+8) inpudata - input data file for above program
+9) tests.zip - contains sample core programs and corresponding input data files
+10) Documentation.txt - Describes the classes used in the program, working of program, test cases and their outputs.
+
