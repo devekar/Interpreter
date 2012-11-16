@@ -63,6 +63,7 @@ void Id::printId()
 
 void Id::declId()
 {
+	if(declared) {printId();cout<<" already declared";exit(1);}
 	declared=true;
 }
 
