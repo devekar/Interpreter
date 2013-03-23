@@ -1,0 +1,84 @@
+CSE 6341, 
+Lisp Interpreter Project, Part 2
+
+Author: Vaibhav Devekar
+Email : devekar.1@osu.edu
+
+======
+Design
+======
+
+The class design for the interpreter includes following classes: 
+Tokenizer - takes data from standard input and verifies if valid token 
+S_exp - binary representation for s-expression with the primitive and arithmetic functions
+IO - handles input i.e. builds s-expression tree from given input obtained from tokenizer and also diplays output for a given tree
+Interpret - evaluates S-expression built by IO
+
+
+Interpret
+---------
+S_exp* eval(S_exp* exp, S_exp * aList);
+- evaluates exp 
+
+S_exp* evlis(S_exp* exp, S_exp * aList);
+- processes exp which is a argument list for eval using a-list
+
+S_exp* evcon(S_exp* pairs, S_exp * aList);
+- processes pairs which is conditional
+
+S_exp* apply(S_exp* f, S_exp* param, S_exp * aList);
+- applies a primitive function or a function from d-list
+
+S_exp* addpairs(S_exp* tt, S_exp* param, S_exp* aList );
+- binds arguments with parameters and adds to a-list
+
+S_exp* add_dList(S_exp* exp);
+- adds a new function definition to d-list
+
+
+
+Tokenizer
+---------
+static Tokenizer* instance();
+- returns the pointer to a Tokenizer object using singleton pattern
+
+bool skip_token();
+- discard current token and fetch next one
+
+std::string get_token();
+- return current token
+
+void process_tok(std::string s);
+- verifies if string s is valid token
+
+bool isInt(std::string s);
+- check if s is an integer
+
+bool isIdentifier(std::string s);
+- check if given string 
+
+bool isCompound(std::string s);
+- check if given string is concatenated sequence of tokens and process accordingly, for eg. (A)
+
+
+S-exp
+-----
+Atomic data such as identifiers, integers, T and NIL are stored as string in the info field. A non-atomic S_exp object is distinguished by "\0" in the info field.
+
+S_exp* S_exp::createS_exp(string s)
+- Pointers to S_exp objects for identifiers are stored and reused. In case of integers, T and NIL, new S_exp objects are created and returned.
+
+string S_exp::get_info()
+- Returns content of S_exp object. 
+
+
+IO
+--
+S_exp* input();
+- Handles atomic literals as well as s-expressions in dot notation. For s-expressions in list notation, calls input2().
+
+S_exp* input2();
+- Helper function to handle end of S-expression i.e. NIL as well as s-expressions in list notation.
+
+void output(S_exp* s);
+- Displays the given S-expression on the output.

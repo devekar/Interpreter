@@ -18,23 +18,21 @@
 #include<sstream>
 
 class Tokenizer{
-	std::vector<std::string> gramtoks;
 	std::vector<std::string> ftoks;
-	int ft;
+	int curr_index;
 	std::string curr_token;
-	int curr_token_no;
 	static Tokenizer* onlycopy;
-	Tokenizer(char* inputfile);
+	Tokenizer();
 public:
 	static Tokenizer* instance();
-	static void instance(char* inputfile);
+	void reset();
 	bool skip_token();
-	int get_token_no();
 	std::string get_token();
-	int issimpletoken(std::string s);
-	int iscomplextoken(std::string &s);
-	bool isint(std::string s);
-	bool isidentifier(std::string s);
+
+	void process_tok(std::string s);
+	bool isInt(std::string s);
+	bool isIdentifier(std::string s);
+	bool isCompound(std::string s);
 
 	~Tokenizer();
 };
