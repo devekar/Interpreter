@@ -1,6 +1,4 @@
-CSE 6341, 
-Lisp Interpreter Project, Part 2
-
+Lisp Interpreter
 Author: Vaibhav Devekar
 Email : devekar.1@osu.edu
 

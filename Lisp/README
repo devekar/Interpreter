@@ -1,0 +1,50 @@
+CSE 6341, 
+Lisp Interpreter Project, Part 2
+
+Author: Vaibhav Devekar
+Email : devekar.1@osu.edu
+
+======
+README
+======
+
+Instructions to run program:
+1) Use command "make" to compile program after navigating to directory containing the source files.
+3) Use command "./interpreterP2" to execute program
+
+
+
+Files associated with the program:
+1) interpreterP2.cpp - Main file
+2) S-exp.h 
+3) S-exp.cpp 
+4) IO.h
+5) IO.cpp
+6) Tokenizer.h
+7) Tokenizer.cpp
+8) Interpret.h
+9) Interpret.cpp
+
+10) design.txt
+11) Makefile
+
+
+Notes:
+1) If the same funtion is defined more than once, the most recent definition is used for evaluation.
+
+2) An S-expression may span many lines but progran expects only one S-expression on a line; any tokens after closing brace of one S-expression or an atomic input will be ignored.
+   For eg. 
+		"()." 	> NIL
+		"A B" 	> A
+		"A.B" 	> A
+
+3) Mix of dot and list notation is treated as error.
+   For eg. 
+		(A A.B)
+		IO: Invalid S-expression
+
+	This is fine:
+		(((A.B).C) D)
+		>  (((A . B) . C) . (D . NIL))
+		
+		
