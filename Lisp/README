@@ -1,6 +1,4 @@
-CSE 6341, 
-Lisp Interpreter Project, Part 2
-
+Lisp Interpreter 
 Author: Vaibhav Devekar
 Email : devekar.1@osu.edu
 
@@ -10,7 +8,7 @@ README
 
 Instructions to run program:
 1) Use command "make" to compile program after navigating to directory containing the source files.
-3) Use command "./interpreterP2" to execute program
+3) Use command "./interpreter" to execute program
 
 
 
